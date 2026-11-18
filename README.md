@@ -22,4 +22,4 @@ Then open http://localhost:8000.
 Any static host works (GitHub Pages, Netlify, Vercel, Cloudflare Pages).
 
 ## Not yet built
-Sign-up and log-in are front-end only. The contact form emails messages through [FormSubmit](https://formsubmit.co); the address is set in `contact.html` (`FORM_ENDPOINT`).
+The sign-up pop-up and the contact form email each submission through [FormSubmit](https://formsubmit.co); the endpoint is `MI_FORM_ENDPOINT` in `js/main.js`. Log-in and a station dashboard are not built yet.

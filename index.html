@@ -28,7 +28,7 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-cta">
-      <a href="#" class="btn btn-ghost btn-sm" onclick="miToast('Log in is coming soon.');return false;">Log in</a>
+      <a href="#" class="btn btn-ghost btn-sm" onclick="miToast('Log in opens once your account is ready. Check your email after signing up.');return false;">Log in</a>
       <a href="#" class="btn btn-primary btn-sm" data-start>Start free</a>
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -468,26 +468,32 @@
         <label><span><input type="radio" name="plan" value="network" />Network</span><span class="muted">$79/mo</span></label>
       </div>
       <div class="field" style="margin-top:18px">
+        <label for="wiz-person">Your name</label>
+        <input id="wiz-person" type="text" placeholder="First and last name" autocomplete="name" />
+        <div class="error-text" id="err-person">Please enter your name.</div>
+      </div>
+      <div class="field">
         <label for="wiz-email">Your email</label>
         <input id="wiz-email" type="email" placeholder="you@example.com" autocomplete="email" />
         <div class="error-text" id="err-email">Enter a valid email address.</div>
       </div>
-      <div class="wizard-actions"><button class="btn btn-ghost" id="wiz-back-3">Back</button><button class="btn btn-primary" id="wiz-next-3">Put me on air</button></div>
+      <div class="error-text" id="err-send">Sorry, we couldn't send your sign-up. Please try again in a moment.</div>
+      <div class="wizard-actions"><button class="btn btn-ghost" id="wiz-back-3">Back</button><button class="btn btn-primary" id="wiz-next-3">Create my station</button></div>
     </div>
 
     <div class="wiz-step success" hidden>
       <div class="big">🎉</div>
-      <h3 style="font-size:1.6rem">You're on air!</h3>
-      <p class="muted">Your station is set up. We've sent next steps to <b id="done-email"></b>.</p>
+      <h3 style="font-size:1.6rem">You're signed up!</h3>
+      <p class="muted">We've received your station request. Within 24 hours we'll email <b id="done-email"></b> with your login and the steps to go on air.</p>
       <div class="station-preview">
         <div class="logo" id="done-logo"></div>
         <div style="min-width:0">
           <b id="done-name"></b>
           <div class="muted" style="font-size:.85rem" id="done-genre"></div>
-          <code id="done-url"></code>
+          <code id="done-url"></code> <span class="muted" style="font-size:.75rem">(reserved)</span>
         </div>
       </div>
-      <button class="btn btn-primary" id="wiz-done" style="width:100%">Go to my dashboard</button>
+      <button class="btn btn-primary" id="wiz-done" style="width:100%">Done</button>
     </div>
   </div>
 </div>

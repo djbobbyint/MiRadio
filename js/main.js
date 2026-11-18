@@ -9,6 +9,23 @@
   const ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
   window.MiIcons = { ICON_PLAY, ICON_PAUSE };
 
+  // Form messages are delivered by FormSubmit (https://formsubmit.co). The code is the
+  // private alias FormSubmit issued for the owner's inbox, so the real address stays hidden.
+  window.MI_FORM_ENDPOINT = "https://formsubmit.co/ajax/9919f49038c51b3447900ba445516d23";
+
+  window.miSendForm = function (data) {
+    return fetch(window.MI_FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(Object.assign({ _template: "table", Page: location.href }, data)),
+    })
+      .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+      .then((res) => {
+        if (!res.ok || String(res.d.success) !== "true") throw new Error(res.d.message || "Send failed");
+        return res.d;
+      });
+  };
+
   /* ---------- Mobile nav ---------- */
   const toggle = $(".menu-toggle");
   const links = $(".nav-links");
@@ -208,21 +225,48 @@
   // Step 3: plan + email
   $("#wiz-back-3").addEventListener("click", () => go(1));
   $("#wiz-next-3").addEventListener("click", () => {
+    const btn = $("#wiz-next-3");
+    if (btn.disabled) return;
+    state.person = $("#wiz-person").value.trim();
     state.email = $("#wiz-email").value.trim();
     const picked = $('.plan-pick input:checked', modal);
     state.plan = picked ? picked.value : "free";
-    const bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
-    err("#err-email", bad);
-    if (bad) return;
+    const badPerson = state.person.length < 2;
+    const badEmail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+    err("#err-person", badPerson);
+    err("#err-email", badEmail);
+    err("#err-send", false);
+    if (badPerson || badEmail) return;
 
     const slug = state.name.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").slice(0, 40) || "my-station";
-    $("#done-name").textContent = state.name;
-    $("#done-genre").textContent = state.genre + " · " + state.plan[0].toUpperCase() + state.plan.slice(1) + " plan";
-    $("#done-url").textContent = "miradio.fm/" + slug;
-    $("#done-logo").textContent = Radio ? Radio.initials(state.name) : state.name[0];
-    $("#done-email").textContent = state.email;
-    try { localStorage.setItem("miradio_station", JSON.stringify(state)); } catch (e) {}
-    go(3);
+    const planName = state.plan[0].toUpperCase() + state.plan.slice(1);
+
+    btn.disabled = true;
+    btn.textContent = "Creating…";
+    miSendForm({
+      _subject: "New MiRadio sign-up: " + state.name,
+      _replyto: state.email,
+      "Station name": state.name,
+      Genre: state.genre,
+      Plan: planName,
+      Name: state.person,
+      Email: state.email,
+      "Requested address": "miradio.fm/" + slug,
+    })
+      .then(() => {
+        $("#done-name").textContent = state.name;
+        $("#done-genre").textContent = state.genre + " · " + planName + " plan";
+        $("#done-url").textContent = "miradio.fm/" + slug;
+        $("#done-logo").textContent = window.Radio ? Radio.initials(state.name) : state.name[0];
+        $("#done-email").textContent = state.email;
+        try { localStorage.setItem("miradio_station", JSON.stringify(state)); } catch (e) {}
+        go(3);
+      })
+      .catch(() => err("#err-send", true))
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = "Create my station";
+      });
   });
   $("#wiz-done").addEventListener("click", close);
 })();

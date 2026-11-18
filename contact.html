@@ -101,10 +101,6 @@
 
 <script src="js/main.js"></script>
 <script>
-  // Messages are delivered by FormSubmit (https://formsubmit.co). The code below is the
-  // private alias FormSubmit issued for the inbox, so the real address stays hidden.
-  var FORM_ENDPOINT = "https://formsubmit.co/ajax/9919f49038c51b3447900ba445516d23";
-
   document.getElementById("contact-form").addEventListener("submit", function (e) {
     e.preventDefault();
     var form = this;
@@ -123,23 +119,15 @@
     btn.disabled = true;
     btn.textContent = "Sending…";
 
-    fetch(FORM_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        _subject: "MiRadio contact: " + topic,
-        _replyto: email,
-        _template: "table",
-        Topic: topic,
-        Name: name,
-        Email: email,
-        Message: msg,
-        Page: location.href
-      })
+    miSendForm({
+      _subject: "MiRadio contact: " + topic,
+      _replyto: email,
+      Topic: topic,
+      Name: name,
+      Email: email,
+      Message: msg
     })
-      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-      .then(function (res) {
-        if (!res.ok || String(res.d.success) !== "true") throw new Error(res.d.message || "Send failed");
+      .then(function () {
         form.reset();
         miToast("Thanks " + name + "! Your message was sent. We'll reply soon.");
       })
