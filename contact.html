@@ -68,6 +68,7 @@
           <label for="c-msg">Message</label>
           <textarea id="c-msg" required placeholder="Tell us about your station…"></textarea>
         </div>
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px" />
         <button class="btn btn-primary" type="submit" style="width:100%">Send message</button>
       </form>
 
@@ -100,16 +101,56 @@
 
 <script src="js/main.js"></script>
 <script>
+  // Messages are delivered by FormSubmit (https://formsubmit.co). The code below is the
+  // private alias FormSubmit issued for the inbox, so the real address stays hidden.
+  var FORM_ENDPOINT = "https://formsubmit.co/ajax/9919f49038c51b3447900ba445516d23";
+
   document.getElementById("contact-form").addEventListener("submit", function (e) {
     e.preventDefault();
+    var form = this;
     var name = document.getElementById("c-name").value.trim();
     var email = document.getElementById("c-email").value.trim();
     var msg = document.getElementById("c-msg").value.trim();
+    var topic = document.getElementById("c-topic").value;
+    var err = document.getElementById("c-err");
     var ok = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && msg;
-    document.getElementById("c-err").classList.toggle("show", !ok);
+    err.textContent = "Please enter your name, a valid email and a message.";
+    err.classList.toggle("show", !ok);
     if (!ok) return;
-    this.reset();
-    miToast("Thanks " + name + "! We'll reply within one business day.");
+    if (form.querySelector('[name="_honey"]').value) return; // spam bot
+
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        _subject: "MiRadio contact: " + topic,
+        _replyto: email,
+        _template: "table",
+        Topic: topic,
+        Name: name,
+        Email: email,
+        Message: msg,
+        Page: location.href
+      })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok || String(res.d.success) !== "true") throw new Error(res.d.message || "Send failed");
+        form.reset();
+        miToast("Thanks " + name + "! Your message was sent. We'll reply soon.");
+      })
+      .catch(function () {
+        err.textContent = "Sorry, your message couldn't be sent. Please try again in a moment.";
+        err.classList.add("show");
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.textContent = "Send message";
+      });
   });
 </script>
 </body>

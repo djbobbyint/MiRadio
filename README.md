@@ -22,4 +22,4 @@ Then open http://localhost:8000.
 Any static host works (GitHub Pages, Netlify, Vercel, Cloudflare Pages).
 
 ## Not yet built
-Sign-up, log-in and the contact form are front-end only. Hook them up to a backend or form service before going live.
+Sign-up and log-in are front-end only. The contact form emails messages through [FormSubmit](https://formsubmit.co); the address is set in `contact.html` (`FORM_ENDPOINT`).
