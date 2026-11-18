@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiRadio — Start Your Own Radio Station, Go Live From Anywhere</title>
+  <meta name="description" content="MiRadio puts your own internet radio station on air in minutes. Upload music, let AutoDJ run 24/7, and go live from your phone with one tap." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container nav" aria-label="Main">
+    <a href="index.html" class="brand"><img src="assets/logo.svg" alt="" /><span>Mi<b>Radio</b></span></a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#gear">Your gear</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="listen.html">Listen</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost btn-sm" onclick="miToast('Log in is coming soon.');return false;">Log in</a>
+      <a href="#" class="btn btn-primary btn-sm" data-start>Start free</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="trust">
+          <div class="dots">
+            <span style="background:#ff5a3c">DJ</span><span style="background:#7b61ff">KR</span><span style="background:#1fb5a8">LM</span><span style="background:#ffb547">+</span>
+          </div>
+          Powering thousands of independent stations
+        </div>
+        <h1>Your own radio station.<br /><span class="grad">Live from your pocket.</span></h1>
+        <p class="lead">Upload your music, set your schedule and MiRadio keeps you on air around the clock. When it's showtime, open the app, tap once, and talk to the world from wherever you are.</p>
+        <form class="start-form" aria-label="Name your station">
+          <label for="hero-name" class="sr-only">Your station name</label>
+          <input id="hero-name" type="text" placeholder="Name your station…" maxlength="60" autocomplete="off" />
+          <button class="btn btn-primary" type="submit">Start my station</button>
+        </form>
+        <div class="hero-notes">
+          <span>Free to start, no card</span>
+          <span>On air in 5 minutes</span>
+          <span>Nothing to install</span>
+        </div>
+      </div>
+
+      <div style="position:relative">
+        <div class="phone" id="demo-phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <span class="onair">ON AIR</span>
+            <div class="art">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 19.1a10 10 0 0 1 0-14.2M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>
+            </div>
+            <div class="st-name">Hear a live station</div>
+            <div class="st-meta">Streaming now on MiRadio</div>
+            <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <button class="big-play" aria-label="Play">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.6-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14Z"/></svg>
+            </button>
+            <div class="hint">Tap for sound</div>
+          </div>
+        </div>
+        <div class="listener-pop"><span class="ic">❤</span><div><b>+12 listeners</b>tuned in just now</div></div>
+        <div class="listener-pop two"><span class="ic">$</span><div><b>$5 tip</b>from Maria in Lisbon</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="container strip-inner">
+      <span>WAVE 88</span><span>Night Owl FM</span><span>Barrio Beats</span><span>The Gospel Hour</span><span>Kick Drum Radio</span><span>Talk Local</span>
+    </div>
+  </div>
+
+  <!-- ================= PROBLEM / SOLUTION ================= -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Why MiRadio</span>
+        <h2>Internet radio shouldn't need<br />an engineering degree</h2>
+        <p class="muted">Old-school stream hosts assume you have a studio PC, know what a mount point is, and enjoy configuring encoders on the weekend. Most people quit before their first show. We fixed that.</p>
+      </div>
+      <div class="compare">
+        <div class="compare-row reveal"><div class="old">You need to be at a computer to broadcast</div><span class="arrow">→</span><div class="new">Go live from your phone in one tap, anywhere with signal</div></div>
+        <div class="compare-row reveal"><div class="old">Encoders, ports, bitrates and mount points</div><span class="arrow">→</span><div class="new">Upload your music, press go, you're streaming</div></div>
+        <div class="compare-row reveal"><div class="old">A monthly bill and zero income</div><span class="arrow">→</span><div class="new">Tips, memberships and sponsor spots from day one</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section id="how" style="background:var(--bg-2)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>On air in three steps</h2>
+        <p class="muted">If you can send an email, you can run a radio station. No servers, no encoders, no technical skills.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="time">~2 min</span>
+          <div class="num">01</div>
+          <h3>Drop in your music</h3>
+          <p>Drag tracks into your cloud library: MP3, WAV, FLAC, M4A or OGG. Add jingles and IDs while you're at it.</p>
+        </div>
+        <div class="step reveal">
+          <span class="time">Instant</span>
+          <div class="num">02</div>
+          <h3>AutoDJ takes over</h3>
+          <p>Your station plays 24/7 with smooth crossfades, smart rotation and no dead air. You get a listen page and an embeddable player.</p>
+        </div>
+        <div class="step reveal">
+          <span class="time">One tap</span>
+          <div class="num">03</div>
+          <h3>Go live whenever</h3>
+          <p>Open the MiRadio app and hit Go Live. The music ducks under your voice and fades back up when you're done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= APP ================= -->
+  <section id="features">
+    <div class="container split">
+      <div class="reveal">
+        <span class="eyebrow">Broadcaster app</span>
+        <h2>The whole studio fits in your pocket</h2>
+        <p class="muted">Shout-outs, live requests, breaking news from the scene: the MiRadio Broadcaster app puts Go Live on your home screen, and buzzes you the moment someone tunes in, taps the heart or sends a tip.</p>
+        <ul class="checklist">
+          <li>Broadcast with your phone mic, or plug in a USB mic</li>
+          <li>See live listener counts, cities and reactions</li>
+          <li>Take song requests and read messages on air</li>
+          <li>Free on every plan, for iPhone and Android</li>
+        </ul>
+        <div class="store-btns">
+          <a class="store" href="#" onclick="miToast('The iOS app is coming soon.');return false;">
+            <svg viewBox="0 0 24 24"><path d="M16.37 12.6c-.02-2.1 1.72-3.12 1.8-3.17-.98-1.43-2.5-1.63-3.04-1.65-1.29-.13-2.52.76-3.18.76-.66 0-1.67-.74-2.75-.72-1.41.02-2.72.82-3.45 2.09-1.47 2.55-.38 6.33 1.06 8.4.7 1.01 1.53 2.15 2.62 2.11 1.05-.04 1.45-.68 2.72-.68 1.27 0 1.63.68 2.74.66 1.13-.02 1.85-1.03 2.54-2.05.8-1.17 1.13-2.31 1.15-2.37-.03-.01-2.2-.85-2.21-3.38ZM14.29 6.42c.58-.7.97-1.68.86-2.65-.83.03-1.84.55-2.44 1.25-.53.62-1 1.61-.88 2.56.93.07 1.88-.47 2.46-1.16Z"/></svg>
+            <span>Download on the<b>App Store</b></span>
+          </a>
+          <a class="store" href="#" onclick="miToast('The Android app is coming soon.');return false;">
+            <svg viewBox="0 0 24 24"><path d="M3.6 2.3a1 1 0 0 0-.4.8v17.8a1 1 0 0 0 .4.8l10-9.7-10-9.7Zm11.1 10.8L5.3 22.2l11.6-6.7-2.2-2.4Zm3.4-4.4-2.7-1.6-2.5 2.5 2.5 2.4 2.7-1.5c.8-.5.8-1.4 0-1.8ZM5.3 1.8l9.4 9.1 2.2-2.4L5.3 1.8Z"/></svg>
+            <span>Get it on<b>Google Play</b></span>
+          </a>
+        </div>
+      </div>
+      <div class="split-media reveal">
+        <div class="panel">
+          <div class="notif"><span class="ic" style="background:rgba(255,90,60,.15)">🎙</span><div><b>You're live</b><small>Morning Drive · 00:14:32</small></div></div>
+          <div class="notif"><span class="ic" style="background:rgba(61,220,151,.15)">👥</span><div><b>48 listening now</b><small>Top cities: Chicago, Lagos, Manila</small></div></div>
+          <div class="notif"><span class="ic" style="background:rgba(255,181,71,.15)">💸</span><div><b>$10 tip from Andre</b><small>"Play some Fela next!"</small></div></div>
+          <div class="notif"><span class="ic" style="background:rgba(123,97,255,.15)">🎵</span><div><b>New song request</b><small>"Golden Hour" — requested by Sam</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GEAR ================= -->
+  <section id="gear" style="background:var(--bg-2)">
+    <div class="container split rev">
+      <div class="reveal">
+        <span class="eyebrow">Optional · for pro setups</span>
+        <h2>Already have a studio? Plug it in.</h2>
+        <p class="muted">Multiple DJs, a mixing desk, an established workflow: keep it all. Point the encoder you already know at MiRadio and carry on exactly as you work today.</p>
+        <ul class="checklist">
+          <li>Anything Icecast-compatible connects with no plugin</li>
+          <li>Step-by-step guides for each tool, with credentials one click away</li>
+          <li>AutoDJ fills the hours you're off air, and takes over if your feed drops</li>
+        </ul>
+        <div class="gear-tags">
+          <span>OBS</span><span>BUTT</span><span>Mixxx</span><span>VirtualDJ</span><span>RadioDJ</span><span>SAM Broadcaster</span><span>Hardware encoders</span>
+        </div>
+      </div>
+      <div class="split-media reveal">
+        <div class="console">
+<span class="c"># Your encoder settings</span>
+<span class="k">server</span>   live.miradio.fm
+<span class="k">port</span>     8000
+<span class="k">mount</span>    /your-station
+<span class="k">user</span>     source
+<span class="k">password</span> ••••••••••••
+<span class="k">format</span>   MP3 / AAC · 128 kbps
+
+<span class="c"># Status</span>
+<span style="color:var(--green)">● Connected</span> — AutoDJ standing by
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DIRECTORY ================= -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Listed in MiRadio Listen</span>
+        <h2>Get heard by people already looking for radio</h2>
+        <p class="muted">MiRadio Listen is our free directory of thousands of live stations. Your station is added automatically, searchable by name and genre on the web, phone and in the car.</p>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><b>45K+</b><span>live stations in the directory</span></div>
+        <div class="stat"><b>200+</b><span>countries and territories</span></div>
+        <div class="stat"><b>24/7</b><span>cloud streaming, no dead air</span></div>
+      </div>
+
+      <div style="margin-top:70px;text-align:center" class="reveal">
+        <h3 style="font-size:1.6rem">Just here to listen?</h3>
+        <form class="search-bar" id="teaser-search" role="search">
+          <label for="teaser-q" class="sr-only">Search radio stations</label>
+          <input id="teaser-q" type="search" placeholder="Search stations, cities or genres…" />
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+        <div class="chips">
+          <a class="chip" href="listen.html?tag=pop">Pop</a>
+          <a class="chip" href="listen.html?tag=news">News & Talk</a>
+          <a class="chip" href="listen.html?tag=rock">Rock</a>
+          <a class="chip" href="listen.html?tag=hip-hop">Hip-Hop</a>
+          <a class="chip" href="listen.html?tag=jazz">Jazz</a>
+          <a class="chip" href="listen.html?tag=christian">Christian</a>
+          <a class="chip" href="listen.html?tag=latin">Latin</a>
+          <a class="chip" href="listen.html?tag=afrobeats">Afrobeats</a>
+          <a class="chip" href="listen.html?tag=classical">Classical</a>
+          <a class="chip" href="listen.html?tag=reggae">Reggae</a>
+        </div>
+        <p style="margin-top:26px"><a href="listen.html" class="accent">Browse the whole directory →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRICING ================= -->
+  <section id="pricing" style="background:var(--bg-2)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Pricing</span>
+        <h2>Simple plans. No listener caps.</h2>
+        <p class="muted">Start free, upgrade when you want a real audience. Every paid plan has a 14-day money-back guarantee.</p>
+        <div class="billing-toggle">
+          <button class="on" data-bill="monthly">Monthly</button>
+          <button data-bill="yearly">Yearly <small>−20%</small></button>
+        </div>
+      </div>
+      <div class="plans">
+        <div class="plan reveal">
+          <h3>Free</h3>
+          <p class="desc">Try everything and hear your stream before you commit.</p>
+          <div class="price">$0<small>/mo</small></div>
+          <div class="per" data-free="1">free forever</div>
+          <ul>
+            <li>1 stream, 64 kbps</li>
+            <li>2 GB music library</li>
+            <li>Cloud AutoDJ</li>
+            <li>Go live from phone</li>
+            <li>Up to 5 listeners at once</li>
+          </ul>
+          <a href="#" class="btn btn-ghost" data-start data-plan="free">Start free</a>
+        </div>
+        <div class="plan reveal">
+          <h3>Starter</h3>
+          <p class="desc">For hobby stations ready for a real audience.</p>
+          <div class="price" data-monthly="19">$19<small>/mo</small></div>
+          <div class="per">billed monthly</div>
+          <ul>
+            <li>128 kbps HD stream</li>
+            <li>25 GB music library</li>
+            <li>Listed in MiRadio Listen</li>
+            <li>Tips & song requests</li>
+            <li>Embeddable web player</li>
+          </ul>
+          <a href="#" class="btn btn-ghost" data-start data-plan="starter">Choose Starter</a>
+        </div>
+        <div class="plan featured reveal">
+          <span class="badge">Most popular</span>
+          <h3>Pro</h3>
+          <p class="desc">Everything a serious station needs to grow.</p>
+          <div class="price" data-monthly="39">$39<small>/mo</small></div>
+          <div class="per">billed monthly</div>
+          <ul>
+            <li>320 kbps + AAC streams</li>
+            <li>100 GB music library</li>
+            <li>Co-host live with guests</li>
+            <li>Auto-recording & podcasts</li>
+            <li>Station website & DJ mixer</li>
+          </ul>
+          <a href="#" class="btn btn-primary" data-start data-plan="pro">Choose Pro</a>
+        </div>
+        <div class="plan reveal">
+          <h3>Network</h3>
+          <p class="desc">For broadcasters running several channels.</p>
+          <div class="price" data-monthly="79">$79<small>/mo</small></div>
+          <div class="per">billed monthly</div>
+          <ul>
+            <li>Up to 5 streams</li>
+            <li>500 GB music library</li>
+            <li>Multiple DJ accounts</li>
+            <li>Advanced analytics & API</li>
+            <li>Priority human support</li>
+          </ul>
+          <a href="#" class="btn btn-ghost" data-start data-plan="network">Choose Network</a>
+        </div>
+      </div>
+      <p class="price-note">Prices in USD. Music licensing is not included; see the FAQ below.</p>
+    </div>
+  </section>
+
+  <!-- ================= MORE FEATURES ================= -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">More you can do</span>
+        <h2>Everything to run, grow and earn</h2>
+      </div>
+      <div class="features">
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M7 8V4M17 8V4"/></svg></div><h3>DJ Mixer</h3><p>Two decks plus your mic, live from your phone or laptop.</p><span class="tier">Pro and up</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.5 6 5"/></svg></div><h3>Co-host Live</h3><p>Send any guest a link and they're on air, no app or account needed.</p><span class="tier">Pro and up</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h4"/></svg></div><h3>Station Website</h3><p>A ready-made site with a player that keeps playing as listeners browse.</p><span class="tier">Pro and up</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3>Earn From Your Station</h3><p>Tips, paid memberships, song requests and sponsor spots built in.</p><span class="tier">Every paid plan</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 16 0v5a2 2 0 0 1-2 2h-1v-6h3M4 13h3v6H6a2 2 0 0 1-2-2v-5"/></svg></div><h3>Get Listed Everywhere</h3><p>MiRadio Listen, smart speakers, car dashboards and popular radio apps.</p><span class="tier">Every paid plan</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l2.4 5 5.6.8-4 3.9 1 5.5L12 15.5 7 18.2l1-5.5-4-3.9L9.6 8z"/></svg></div><h3>AI Promo Studio</h3><p>Generate social posts, short videos and voice spots for your shows.</p><span class="tier">Every plan</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Scheduling</h3><p>Plan shows, playlists and the hourly news bulletin on a drag-and-drop calendar.</p><span class="tier">Every plan</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div><h3>Recording & Podcasts</h3><p>Record live shows automatically and publish them with a proper RSS feed.</p><span class="tier">Pro and up</span></div>
+        <div class="feature reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div><h3>Your Own App</h3><p>A branded app for your station on iPhone and Android.</p><span class="tier">Add-on, any plan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq" style="background:var(--bg-2)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions people ask before signing up</h2>
+      </div>
+      <div class="faq">
+        <details><summary>Is this FM radio? Who can hear me?</summary><p>It's internet radio, so there's no transmitter, no broadcast licence and no range limit. Anyone in the world with a phone, computer, smart speaker or connected car can listen via your listen page, the embeddable player, or the MiRadio Listen directory.</p></details>
+        <details><summary>Do I have to pay anything to start?</summary><p>No. Every account starts on the Free plan with no card required. You get a real station on air so you can upload music, go live and hear your stream before deciding to upgrade.</p></details>
+        <details><summary>Can I really broadcast live from my phone?</summary><p>Yes, that's the whole idea. Sign in to the MiRadio Broadcaster app on iOS or Android and tap Go Live. AutoDJ lowers the music under your voice and brings it back up when you finish.</p></details>
+        <details><summary>Does my plan cover music licences and royalties?</summary><p>No. As with every streaming host, you're responsible for your own music licences. In the US that usually means SoundExchange for recordings plus ASCAP, BMI and SESAC for songwriting. Other countries have their own collecting societies. If you only play your own or royalty-free music, you may not need any.</p></details>
+        <details><summary>Can I use OBS, BUTT, Mixxx or VirtualDJ?</summary><p>Yes. Any Icecast-compatible encoder connects straight to your station. Your server, mount and password are in the dashboard, along with a setup guide for each tool.</p></details>
+        <details><summary>Why not just go live on social media?</summary><p>A social live stream ends when you stop talking. A radio station plays 24/7 whether you're there or not, listeners don't need an account to tune in, and the audience is yours: your link, your brand, your income.</p></details>
+        <details><summary>I'm not technical. Will someone help me?</summary><p>Yes. Support lives inside your dashboard as a chat, and our team is a message away. Most stations are fully set up in a single sitting.</p></details>
+        <details><summary>Can I cancel or change plans any time?</summary><p>Yes. Upgrades are prorated immediately; downgrades take effect at the end of your billing period so your stream never drops. Cancel from the dashboard in one click.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+  <section>
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>Your first show could be tonight</h2>
+        <p>Start free with no card. Upload a handful of tracks and you're a radio station before dinner.</p>
+        <form class="start-form" style="margin:0 auto;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)">
+          <label for="cta-name" class="sr-only">Your station name</label>
+          <input id="cta-name" type="text" placeholder="Your station name" maxlength="60" style="color:#fff" />
+          <button class="btn btn-primary" type="submit">Start my station</button>
+        </form>
+        <div class="cta-list">
+          <span>24/7 cloud streaming</span><span>Go live from phone or browser</span><span>Global delivery</span><span>Tips & memberships built in</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="index.html" class="brand"><img src="assets/logo.svg" alt="" /><span>Mi<b>Radio</b></span></a>
+        <p>Stream from anywhere and go live in seconds. Cloud AutoDJ runs your station 24/7, from your phone, your browser or pro gear.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Broadcaster app</a></li>
+          <li><a href="#gear">Connect your gear</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Listen</h4>
+        <ul>
+          <li><a href="listen.html">Radio directory</a></li>
+          <li><a href="listen.html?tag=news">News & Talk</a></li>
+          <li><a href="listen.html?tag=pop">Pop</a></li>
+          <li><a href="contact.html">Add your station</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="contact.html">Contact us</a></li>
+          <li><a href="contact.html">About</a></li>
+          <li><a href="contact.html">Affiliates</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Copyright & DMCA</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span class="year">2026</span> MiRadio. All rights reserved.</span>
+      <span>Directory data from the community-run Radio Browser project.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= START WIZARD ================= -->
+<div class="modal" id="start-modal" role="dialog" aria-modal="true" aria-labelledby="wiz-title">
+  <div class="modal-card">
+    <button class="modal-close" aria-label="Close">×</button>
+    <div class="progress"><i class="on"></i><i></i><i></i><i></i></div>
+
+    <div class="wiz-step">
+      <h3 id="wiz-title" style="font-size:1.6rem">Name your station</h3>
+      <p class="muted">You can change it later. Pick something listeners will remember.</p>
+      <div class="field">
+        <label for="wiz-name">Station name</label>
+        <input id="wiz-name" type="text" maxlength="60" placeholder="e.g. Sunset Grooves FM" />
+        <div class="error-text" id="err-name">Please enter at least 2 characters.</div>
+      </div>
+      <div class="wizard-actions"><span></span><button class="btn btn-primary" id="wiz-next-1">Continue</button></div>
+    </div>
+
+    <div class="wiz-step" hidden>
+      <h3 style="font-size:1.6rem">What will you play?</h3>
+      <p class="muted">Helps listeners find you in the directory.</p>
+      <div class="genre-pick">
+        <button>Pop</button><button>Hip-Hop</button><button>Rock</button>
+        <button>Latin</button><button>Afrobeats</button><button>Jazz</button>
+        <button>Gospel</button><button>Talk</button><button>Electronic</button>
+        <button>Country</button><button>Reggae</button><button>Variety</button>
+      </div>
+      <div class="error-text" id="err-genre">Pick a genre to continue.</div>
+      <div class="wizard-actions"><button class="btn btn-ghost" id="wiz-back-2">Back</button><button class="btn btn-primary" id="wiz-next-2">Continue</button></div>
+    </div>
+
+    <div class="wiz-step" hidden>
+      <h3 style="font-size:1.6rem">Choose a plan</h3>
+      <p class="muted">Start free, upgrade any time.</p>
+      <div class="plan-pick">
+        <label><span><input type="radio" name="plan" value="free" checked />Free</span><span class="muted">$0</span></label>
+        <label><span><input type="radio" name="plan" value="starter" />Starter</span><span class="muted">$19/mo</span></label>
+        <label><span><input type="radio" name="plan" value="pro" />Pro</span><span class="muted">$39/mo</span></label>
+        <label><span><input type="radio" name="plan" value="network" />Network</span><span class="muted">$79/mo</span></label>
+      </div>
+      <div class="field" style="margin-top:18px">
+        <label for="wiz-email">Your email</label>
+        <input id="wiz-email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <div class="error-text" id="err-email">Enter a valid email address.</div>
+      </div>
+      <div class="wizard-actions"><button class="btn btn-ghost" id="wiz-back-3">Back</button><button class="btn btn-primary" id="wiz-next-3">Put me on air</button></div>
+    </div>
+
+    <div class="wiz-step success" hidden>
+      <div class="big">🎉</div>
+      <h3 style="font-size:1.6rem">You're on air!</h3>
+      <p class="muted">Your station is set up. We've sent next steps to <b id="done-email"></b>.</p>
+      <div class="station-preview">
+        <div class="logo" id="done-logo"></div>
+        <div style="min-width:0">
+          <b id="done-name"></b>
+          <div class="muted" style="font-size:.85rem" id="done-genre"></div>
+          <code id="done-url"></code>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="wiz-done" style="width:100%">Go to my dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/radio.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiRadio Listen — Live Radio Stations From Around the World</title>
+  <meta name="description" content="Listen free to thousands of live radio stations. Search by name, genre or country on MiRadio Listen." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container nav" aria-label="Main">
+    <a href="index.html" class="brand"><img src="assets/logo.svg" alt="" /><span>Mi<b>Radio</b></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#how">How it works</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a href="listen.html" class="active">Listen</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="index.html" class="btn btn-primary btn-sm">Start a station</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="listen-hero">
+    <div class="container">
+      <span class="eyebrow">MiRadio Listen</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.4rem)">Live radio from <span class="grad">everywhere</span></h1>
+      <p class="muted" style="max-width:560px;margin:0 auto 28px">Thousands of stations, free, no account needed. Search, tap play, and save your favourites.</p>
+
+      <form class="search-bar" id="search-form" role="search">
+        <label for="q" class="sr-only">Search stations</label>
+        <input id="q" type="search" placeholder="Search by station name…" autocomplete="off" />
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+
+      <div class="filters">
+        <label for="country" class="sr-only">Country</label>
+        <select id="country"><option value="">All countries</option></select>
+        <label for="sort" class="sr-only">Sort by</label>
+        <select id="sort">
+          <option value="clickcount">Most popular</option>
+          <option value="votes">Most liked</option>
+          <option value="name">A–Z</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="dir-section">
+    <div class="container">
+      <div class="tabs chips" id="genres">
+        <button class="chip active" data-tag="">Top stations</button>
+        <button class="chip" data-tag="__fav">♥ Favourites</button>
+        <button class="chip" data-tag="pop">Pop</button>
+        <button class="chip" data-tag="news">News & Talk</button>
+        <button class="chip" data-tag="rock">Rock</button>
+        <button class="chip" data-tag="hip-hop">Hip-Hop</button>
+        <button class="chip" data-tag="jazz">Jazz</button>
+        <button class="chip" data-tag="christian">Christian</button>
+        <button class="chip" data-tag="latin">Latin</button>
+        <button class="chip" data-tag="afrobeats">Afrobeats</button>
+        <button class="chip" data-tag="classical">Classical</button>
+        <button class="chip" data-tag="reggae">Reggae</button>
+        <button class="chip" data-tag="country">Country</button>
+        <button class="chip" data-tag="electronic">Electronic</button>
+        <button class="chip" data-tag="80s">80s</button>
+      </div>
+
+      <div class="result-head">
+        <h2 id="result-title">Top stations</h2>
+        <span class="muted" id="result-count"></span>
+      </div>
+      <div class="station-grid" id="grid" aria-live="polite"></div>
+      <div class="load-more"><button class="btn btn-ghost" id="more" hidden>Load more stations</button></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" style="margin-top:0">
+  <div class="container">
+    <div class="footer-bottom" style="margin-top:0;border:0;padding-top:0">
+      <span>© <span class="year">2026</span> MiRadio. All rights reserved.</span>
+      <span>Station data from the community-run <a href="https://www.radio-browser.info" target="_blank" rel="noopener" class="accent">Radio Browser</a> project.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Persistent player -->
+<div class="player" id="player" aria-label="Now playing">
+  <div class="container player-inner">
+    <div class="thumb" id="p-thumb"></div>
+    <div class="info">
+      <div class="name" id="p-name">—</div>
+      <div class="status"><span class="live">● LIVE</span><span id="p-status">Ready</span></div>
+    </div>
+    <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="vol">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4V5ZM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <label for="volume" class="sr-only">Volume</label>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9" />
+    </div>
+    <button class="ctrl" id="p-toggle" aria-label="Pause"></button>
+  </div>
+</div>
+
+<script src="js/radio.js"></script>
+<script src="js/main.js"></script>
+<script src="js/listen.js"></script>
+</body>
+</html>

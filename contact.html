@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact MiRadio</title>
+  <meta name="description" content="Get in touch with the MiRadio team, or list your existing station in the MiRadio Listen directory." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container nav" aria-label="Main">
+    <a href="index.html" class="brand"><img src="assets/logo.svg" alt="" /><span>Mi<b>Radio</b></span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#how">How it works</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a href="listen.html">Listen</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="index.html" class="btn btn-primary btn-sm">Start a station</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Contact</span>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">We'd love to hear from you</h1>
+      <p class="muted">Questions about plans, help getting on air, or want your existing station listed in MiRadio Listen? Send us a note.</p>
+    </div>
+
+    <div class="contact-grid">
+      <form class="contact-card" id="contact-form" novalidate>
+        <div class="field">
+          <label for="c-topic">What's this about?</label>
+          <select id="c-topic">
+            <option>General question</option>
+            <option>Help setting up my station</option>
+            <option>List my existing station for free</option>
+            <option>Billing</option>
+            <option>Partnerships & affiliates</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-name">Name</label>
+          <input id="c-name" type="text" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="c-email">Email</label>
+          <input id="c-email" type="email" autocomplete="email" required />
+          <div class="error-text" id="c-err">Please enter your name, a valid email and a message.</div>
+        </div>
+        <div class="field">
+          <label for="c-msg">Message</label>
+          <textarea id="c-msg" required placeholder="Tell us about your station…"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Send message</button>
+      </form>
+
+      <div style="display:grid;gap:18px;align-content:start">
+        <div class="contact-card">
+          <h3>💬 Live chat</h3>
+          <p class="muted" style="margin:0">Already a broadcaster? Support lives inside your dashboard. Most questions are answered in minutes.</p>
+        </div>
+        <div class="contact-card">
+          <h3>📻 Already streaming elsewhere?</h3>
+          <p class="muted" style="margin:0">List your station in the MiRadio Listen directory for free. Pick "List my existing station" in the form and include your stream URL.</p>
+        </div>
+        <div class="contact-card">
+          <h3>🤝 Affiliates</h3>
+          <p class="muted" style="margin:0">Podcasters, DJs and creators: earn a share of every station you refer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="margin-top:0;border:0;padding-top:0">
+      <span>© <span class="year">2026</span> MiRadio. All rights reserved.</span>
+      <span><a href="listen.html" class="accent">Listen to live radio →</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  document.getElementById("contact-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("c-name").value.trim();
+    var email = document.getElementById("c-email").value.trim();
+    var msg = document.getElementById("c-msg").value.trim();
+    var ok = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && msg;
+    document.getElementById("c-err").classList.toggle("show", !ok);
+    if (!ok) return;
+    this.reset();
+    miToast("Thanks " + name + "! We'll reply within one business day.");
+  });
+</script>
+</body>
+</html>
