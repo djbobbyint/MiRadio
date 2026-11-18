@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiRadio Dashboard</title>
+  <meta name="description" content="Log in to manage your MiRadio station." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/favicon-48.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container nav" aria-label="Main">
+    <a href="index.html" class="brand"><img src="assets/miradio-logo.webp" alt="MiRadio" width="640" height="328" /></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="listen.html">Listen</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost btn-sm" id="signout" hidden>Log out</button>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main class="page dash">
+  <div class="container">
+
+    <!-- Loading -->
+    <div id="view-loading" class="dash-center"><div class="spinner big"></div></div>
+
+    <!-- Database not connected yet -->
+    <div id="view-offline" class="dash-center" hidden>
+      <div class="contact-card auth-card">
+        <h2 style="font-size:1.6rem">Dashboard coming online</h2>
+        <p class="muted">Station accounts aren't switched on yet. Sign-ups are still received by email, and we'll reply with your login details.</p>
+        <a href="index.html?start=1" class="btn btn-primary" style="width:100%">Start a station</a>
+      </div>
+    </div>
+
+    <!-- Log in -->
+    <div id="view-login" class="dash-center" hidden>
+      <form class="contact-card auth-card" id="login-form" novalidate>
+        <h2 style="font-size:1.7rem;margin-bottom:6px">Log in</h2>
+        <p class="muted">Manage your MiRadio station.</p>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" autocomplete="current-password" required />
+        </div>
+        <div class="error-text" id="login-err"></div>
+        <button class="btn btn-primary" type="submit" style="width:100%;margin-top:6px">Log in</button>
+        <div class="auth-links">
+          <a href="#" id="forgot" class="accent">Forgot password?</a>
+          <span class="muted">New here? <a href="index.html?start=1" class="accent">Start a station</a></span>
+        </div>
+      </form>
+    </div>
+
+    <!-- Set a new password (after clicking the reset link) -->
+    <div id="view-reset" class="dash-center" hidden>
+      <form class="contact-card auth-card" id="reset-form" novalidate>
+        <h2 style="font-size:1.6rem">Choose a new password</h2>
+        <div class="field">
+          <label for="new-password">New password</label>
+          <input id="new-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
+        </div>
+        <div class="error-text" id="reset-err"></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Save password</button>
+      </form>
+    </div>
+
+    <!-- Signed in -->
+    <div id="view-app" hidden>
+      <div class="dash-head">
+        <div>
+          <span class="eyebrow">Dashboard</span>
+          <h1 id="hello" style="font-size:clamp(1.8rem,4vw,2.6rem);margin:0">Welcome back</h1>
+        </div>
+        <span class="muted" id="who"></span>
+      </div>
+
+      <!-- Owner: my station(s) -->
+      <section class="dash-block" id="my-stations-block">
+        <h2 class="dash-h2">My station</h2>
+        <div id="my-stations"></div>
+      </section>
+
+      <!-- Admin: all sign-ups -->
+      <section class="dash-block" id="admin-block" hidden>
+        <div class="dash-row">
+          <h2 class="dash-h2" style="margin:0">All sign-ups <span class="tag-admin">Admin</span></h2>
+          <div class="dash-tools">
+            <label for="adm-search" class="sr-only">Search</label>
+            <input id="adm-search" type="search" placeholder="Search station, name or email…" />
+            <label for="adm-filter" class="sr-only">Status</label>
+            <select id="adm-filter">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="live">Live</option>
+              <option value="paused">Paused</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" id="adm-refresh">Refresh</button>
+            <button class="btn btn-ghost btn-sm" id="adm-csv">Download CSV</button>
+          </div>
+        </div>
+        <div class="stats dash-stats" id="adm-stats"></div>
+        <div class="table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr><th>Signed up</th><th>Station</th><th>Owner</th><th>Plan</th><th>Genre</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="adm-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" style="margin-top:0">
+  <div class="container">
+    <div class="footer-bottom" style="margin-top:0;border:0;padding-top:0">
+      <span>© <span class="year">2026</span> MiRadio. All rights reserved.</span>
+      <span><a href="contact.html" class="accent">Need help? Contact us →</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/radio.js"></script>
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

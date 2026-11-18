@@ -222,51 +222,119 @@
     go(2);
   });
 
-  // Step 3: plan + email
-  $("#wiz-back-3").addEventListener("click", () => go(1));
-  $("#wiz-next-3").addEventListener("click", () => {
-    const btn = $("#wiz-next-3");
-    if (btn.disabled) return;
-    state.person = $("#wiz-person").value.trim();
-    state.email = $("#wiz-email").value.trim();
-    const picked = $('.plan-pick input:checked', modal);
-    state.plan = picked ? picked.value : "free";
-    const badPerson = state.person.length < 2;
-    const badEmail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
-    err("#err-person", badPerson);
-    err("#err-email", badEmail);
-    err("#err-send", false);
-    if (badPerson || badEmail) return;
+  // Step 3: plan + account details
+  const pwField = $("#wiz-password-field");
+  if (pwField) pwField.hidden = !window.miDb;
 
-    const slug = state.name.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").slice(0, 40) || "my-station";
+  function showDone(title, html, buttonText, buttonHref) {
+    const slug = state.slug;
     const planName = state.plan[0].toUpperCase() + state.plan.slice(1);
+    $("#done-title").textContent = title;
+    $("#done-text").innerHTML = html;
+    $("#done-name").textContent = state.name;
+    $("#done-genre").textContent = state.genre + " · " + planName + " plan";
+    $("#done-url").textContent = "miradio.fm/" + slug;
+    $("#done-logo").textContent = window.Radio ? Radio.initials(state.name) : state.name[0];
+    const btn = $("#wiz-done");
+    btn.textContent = buttonText;
+    btn.dataset.href = buttonHref || "";
+    go(3);
+  }
+  function escHtml(t) { return String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
 
-    btn.disabled = true;
-    btn.textContent = "Creating…";
-    miSendForm({
+  function notifyOwner() {
+    // Email copy of every sign-up to the site owner (best effort).
+    if (!window.miSendForm) return Promise.resolve();
+    return miSendForm({
       _subject: "New MiRadio sign-up: " + state.name,
       _replyto: state.email,
       "Station name": state.name,
       Genre: state.genre,
-      Plan: planName,
+      Plan: state.plan[0].toUpperCase() + state.plan.slice(1),
       Name: state.person,
       Email: state.email,
-      "Requested address": "miradio.fm/" + slug,
-    })
-      .then(() => {
-        $("#done-name").textContent = state.name;
-        $("#done-genre").textContent = state.genre + " · " + planName + " plan";
-        $("#done-url").textContent = "miradio.fm/" + slug;
-        $("#done-logo").textContent = window.Radio ? Radio.initials(state.name) : state.name[0];
-        $("#done-email").textContent = state.email;
+      "Requested address": "miradio.fm/" + state.slug,
+    });
+  }
+
+  function sendError(msg) {
+    const el = $("#err-send");
+    el.innerHTML = msg;
+    el.classList.add("show");
+  }
+
+  $("#wiz-back-3").addEventListener("click", () => go(1));
+  $("#wiz-next-3").addEventListener("click", async () => {
+    const btn = $("#wiz-next-3");
+    if (btn.disabled) return;
+    state.person = $("#wiz-person").value.trim();
+    state.email = $("#wiz-email").value.trim();
+    const password = window.miDb ? $("#wiz-password").value : "";
+    const picked = $('.plan-pick input:checked', modal);
+    state.plan = picked ? picked.value : "free";
+    const badPerson = state.person.length < 2;
+    const badEmail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+    const badPw = !!window.miDb && password.length < 8;
+    err("#err-person", badPerson);
+    err("#err-email", badEmail);
+    if ($("#err-password")) err("#err-password", badPw);
+    err("#err-send", false);
+    if (badPerson || badEmail || badPw) return;
+
+    state.slug = state.name.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").slice(0, 40) || "my-station";
+    btn.disabled = true;
+    btn.textContent = "Creating…";
+
+    try {
+      if (window.miDb) {
+        const { data, error } = await miDb.auth.signUp({
+          email: state.email,
+          password,
+          options: {
+            data: { station_name: state.name, genre: state.genre, plan: state.plan, owner_name: state.person },
+            emailRedirectTo: new URL("dashboard.html", location.href).href,
+          },
+        });
+        const exists =
+          (error && /already|registered|exists/i.test(error.message)) ||
+          (data && data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0);
+        if (exists) {
+          sendError('An account with this email already exists. <a class="accent" href="dashboard.html">Log in to your dashboard</a>.');
+          return;
+        }
+        if (error) throw error;
+        notifyOwner().catch(() => {});
         try { localStorage.setItem("miradio_station", JSON.stringify(state)); } catch (e) {}
-        go(3);
-      })
-      .catch(() => err("#err-send", true))
-      .finally(() => {
-        btn.disabled = false;
-        btn.textContent = "Create my station";
-      });
+        if (data.session) {
+          showDone("Your station is created!", "Your account is ready. Open your dashboard to see your station.", "Go to my dashboard", "dashboard.html");
+        } else {
+          showDone(
+            "Check your email",
+            "We sent a confirmation link to <b>" + escHtml(state.email) + "</b>. Click it to activate your account and open your dashboard. (Check spam if you don't see it.)",
+            "Done"
+          );
+        }
+      } else {
+        await notifyOwner();
+        try { localStorage.setItem("miradio_station", JSON.stringify(state)); } catch (e) {}
+        showDone(
+          "You're signed up!",
+          "We've received your station request. Within 24 hours we'll email <b>" + escHtml(state.email) + "</b> with your login and the steps to go on air.",
+          "Done"
+        );
+      }
+    } catch (e) {
+      sendError("Sorry, we couldn't create your station" + (e && e.message ? ": " + escHtml(e.message) : "") + ". Please try again.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Create my station";
+    }
   });
-  $("#wiz-done").addEventListener("click", close);
+  $("#wiz-done").addEventListener("click", () => {
+    const href = $("#wiz-done").dataset.href;
+    if (href) location.href = href; else close();
+  });
+
+  // Open the sign-up straight away when linked with ?start=1 (e.g. from the dashboard).
+  if (new URLSearchParams(location.search).get("start")) open();
 })();
