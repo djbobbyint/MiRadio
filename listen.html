@@ -83,6 +83,15 @@
         <button class="chip" data-tag="80s">80s</button>
       </div>
 
+      <div id="mi-section" hidden>
+        <div class="result-head">
+          <h2>On MiRadio</h2>
+          <span class="muted">Stations broadcasting with MiRadio</span>
+        </div>
+        <div class="station-grid" id="mi-grid"></div>
+        <div style="height:40px"></div>
+      </div>
+
       <div class="result-head">
         <h2 id="result-title">Top stations</h2>
         <span class="muted" id="result-count"></span>
@@ -120,6 +129,8 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
 <script src="js/radio.js"></script>
 <script src="js/main.js"></script>
 <script src="js/listen.js"></script>

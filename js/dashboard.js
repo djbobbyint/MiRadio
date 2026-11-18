@@ -36,6 +36,19 @@
 
   if (!db) { show("offline"); return; }
 
+  /* ---------- Streaming server (AzuraCast via Supabase function) ---------- */
+  async function stream(action, extra) {
+    const { data, error } = await db.functions.invoke("azuracast", { body: Object.assign({ action }, extra) });
+    if (error) {
+      let msg = error.message || "Request failed";
+      try { const j = await error.context.json(); if (j && j.error) msg = j.error; } catch (e) {}
+      if (/Failed to send|not found|404/i.test(msg)) msg = "The streaming server isn't connected yet.";
+      throw new Error(msg);
+    }
+    if (data && data.error) throw new Error(data.error);
+    return data || {};
+  }
+
   /* ---------- Auth ---------- */
   $("#login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -126,6 +139,49 @@
     rows.forEach((r) => box.appendChild(stationCard(r)));
   }
 
+  function kv(label, value, secret) {
+    if (value == null || value === "") return "";
+    const shown = secret ? "••••••••" : esc(value);
+    return `<div class="kv"><span>${esc(label)}</span><code ${secret ? `data-value="${esc(value)}" data-hidden="1"` : ""}>${shown}</code>${
+      secret ? '<button type="button" class="link-btn" data-reveal>Show</button>' : ""
+    }<button type="button" class="link-btn" data-copy="${esc(value)}">Copy</button></div>`;
+  }
+
+  function streamPanel(r) {
+    const player = r.player_url || "";
+    let host = "", base = "";
+    try { const u = new URL(r.stream_url); host = u.hostname; base = u.origin; } catch (e) {}
+    try { if (player) base = new URL(player).origin; } catch (e) {}
+    const embed = player ? `<iframe src="${player}/embed" frameborder="0" allowtransparency="true" style="width:100%;min-height:150px;border:0;"></iframe>` : "";
+    return `
+      <div class="ms-stream">
+        <div class="ms-col">
+          <h4>Listen</h4>
+          <audio controls preload="none" src="${esc(r.stream_url)}"></audio>
+          ${kv("Stream link", r.stream_url)}
+          ${kv("Public page", player)}
+          ${embed ? kv("Website player (paste into any site)", embed) : ""}
+        </div>
+        <div class="ms-col">
+          <h4>Go live</h4>
+          ${player ? `<a class="btn btn-primary btn-sm" href="${esc(player)}/dj" target="_blank" rel="noopener">🎙 Broadcast from your browser</a>` : ""}
+          <p class="muted small" style="margin:12px 0 8px">Or connect OBS, BUTT, Mixxx or VirtualDJ with these settings:</p>
+          ${kv("Server", host)}
+          ${kv("Port", r.dj_port)}
+          ${kv("Mount", "/")}
+          ${kv("Username", r.dj_username)}
+          ${kv("Password", r.dj_password, true)}
+        </div>
+        <div class="ms-col">
+          <h4>Music &amp; schedule</h4>
+          <p class="muted small" style="margin:0 0 12px">Upload songs, build playlists and set your AutoDJ schedule in the control panel.</p>
+          ${base ? `<a class="btn btn-ghost btn-sm" href="${esc(base)}/login" target="_blank" rel="noopener">Open control panel</a>` : ""}
+          ${r.panel_password ? kv("Login email", r.email) + kv("Temporary password", r.panel_password, true) +
+            '<p class="muted small" style="margin:8px 0 0">Change this password after your first login.</p>' : ""}
+        </div>
+      </div>`;
+  }
+
   function stationCard(r) {
     const st = STATUS[r.status] || STATUS.pending;
     const el = document.createElement("div");
@@ -159,11 +215,31 @@
           <ol>
             <li class="done">Create your account</li>
             <li class="${r.status !== "pending" ? "done" : ""}">Station approved by MiRadio</li>
+            <li class="${r.stream_url ? "done" : ""}">Your stream is set up</li>
             <li class="${r.status === "live" ? "done" : ""}">Upload music &amp; go live</li>
           </ol>
           <p class="muted" style="font-size:.85rem;margin:0">Questions? <a class="accent" href="contact.html">Contact us</a>.</p>
         </div>
-      </div>`;
+      </div>
+      ${r.stream_url ? streamPanel(r) : ""}`;
+    el.querySelectorAll("[data-copy]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const v = b.dataset.copy;
+        (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(
+          () => miToast("Copied"),
+          () => prompt("Copy this:", v)
+        );
+      })
+    );
+    el.querySelectorAll("[data-reveal]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const t = b.previousElementSibling;
+        const hidden = t.dataset.hidden !== "0";
+        t.textContent = hidden ? t.dataset.value : "••••••••";
+        t.dataset.hidden = hidden ? "0" : "1";
+        b.textContent = hidden ? "Hide" : "Show";
+      })
+    );
     $(".ms-edit", el).addEventListener("submit", async (e) => {
       e.preventDefault();
       const f = e.currentTarget;
@@ -196,7 +272,7 @@
     );
     const body = $("#adm-rows");
     if (!rows.length) {
-      body.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center;padding:30px">${allRows.length ? "No sign-ups match." : "No sign-ups yet. They'll appear here as people join."}</td></tr>`;
+      body.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center;padding:30px">${allRows.length ? "No sign-ups match." : "No sign-ups yet. They'll appear here as people join."}</td></tr>`;
       return;
     }
     body.innerHTML = "";
@@ -208,6 +284,9 @@
         <td>${esc(r.owner_name || "—")}<div class="small"><a class="accent" href="mailto:${esc(r.email)}">${esc(r.email)}</a></div></td>
         <td>${esc(cap(r.plan))}</td>
         <td>${esc(r.genre || "—")}</td>
+        <td>${r.stream_url
+          ? `<a class="accent small" href="${esc(r.player_url || r.stream_url)}" target="_blank" rel="noopener">✓ Ready</a>`
+          : '<button class="btn btn-ghost btn-sm mk-stream">Create stream</button>'}</td>
         <td><select class="status-select s-${esc(r.status)}" aria-label="Status for ${esc(r.station_name)}">
           ${Object.keys(STATUS).map((s) => `<option value="${s}"${s === r.status ? " selected" : ""}>${cap(s)}</option>`).join("")}
         </select></td>
@@ -215,14 +294,30 @@
       const sel = $("select", tr);
       sel.addEventListener("change", async () => {
         const prev = r.status;
+        const next = sel.value;
         sel.disabled = true;
-        const { error } = await db.from("stations").update({ status: sel.value }).eq("id", r.id);
+        const { error } = await db.from("stations").update({ status: next }).eq("id", r.id);
         sel.disabled = false;
         if (error) { sel.value = prev; return miToast("Couldn't update: " + error.message); }
-        r.status = sel.value;
+        r.status = next;
         sel.className = "status-select s-" + r.status;
         miToast(`${r.station_name} → ${cap(r.status)}`);
         renderAdmin();
+        // Keep the streaming server in step with the status.
+        try {
+          if ((next === "approved" || next === "live") && !r.azuracast_id) {
+            await provision(r);
+          } else if (r.azuracast_id && (next === "paused") !== (prev === "paused")) {
+            await stream("set_enabled", { station_id: r.id, enabled: next !== "paused" });
+            miToast(next === "paused" ? "Stream switched off." : "Stream switched back on.");
+          }
+        } catch (e) {
+          miToast("Streaming server: " + e.message);
+        }
+      });
+      const mk = $(".mk-stream", tr);
+      if (mk) mk.addEventListener("click", async () => {
+        try { await provision(r, mk); } catch (e) { miToast("Couldn't create stream: " + e.message); }
       });
       $(".icon-btn", tr).addEventListener("click", async () => {
         if (!confirm(`Delete the sign-up for “${r.station_name}”? This can't be undone.`)) return;
@@ -234,6 +329,23 @@
       });
       body.appendChild(tr);
     });
+  }
+
+  async function provision(r, btn) {
+    if (btn) { btn.disabled = true; btn.textContent = "Creating…"; }
+    miToast(`Creating the stream for ${r.station_name}…`);
+    try {
+      const res = await stream("provision", { station_id: r.id });
+      if (res.warnings && res.warnings.length) {
+        console.warn("AzuraCast warnings:", res.warnings);
+        miToast("Stream created, with notes: " + res.warnings.join(" · "));
+      } else {
+        miToast(`Stream ready for ${r.station_name}.`);
+      }
+      await load();
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = "Create stream"; }
+    }
   }
 
   $("#adm-search").addEventListener("input", renderAdmin);

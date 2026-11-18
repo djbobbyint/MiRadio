@@ -20,6 +20,16 @@ create table if not exists public.stations (
 );
 create index if not exists stations_owner_idx on public.stations (owner_id);
 
+-- Streaming details, filled in automatically when a station is created on AzuraCast
+alter table public.stations add column if not exists azuracast_id    int;
+alter table public.stations add column if not exists azuracast_short text;
+alter table public.stations add column if not exists stream_url      text;
+alter table public.stations add column if not exists player_url      text;
+alter table public.stations add column if not exists dj_username     text;
+alter table public.stations add column if not exists dj_password     text;
+alter table public.stations add column if not exists dj_port         int;
+alter table public.stations add column if not exists panel_password  text;
+
 -- People allowed to see and manage every sign-up ---------------------------
 create table if not exists public.admins (
   user_id uuid primary key references auth.users (id) on delete cascade
@@ -61,15 +71,29 @@ returns trigger
 language plpgsql security definer
 set search_path = public
 as $$
+declare
+  jwt_role text := coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role', '');
 begin
+  -- The MiRadio server function (service role) and the SQL Editor may change anything.
+  if jwt_role = 'service_role' or session_user = 'postgres' then
+    return new;
+  end if;
   if not public.is_admin() then
-    new.owner_id   := old.owner_id;
-    new.plan       := old.plan;
-    new.status     := old.status;
-    new.slug       := old.slug;
-    new.email      := old.email;
-    new.admin_note := old.admin_note;
-    new.created_at := old.created_at;
+    new.owner_id        := old.owner_id;
+    new.plan            := old.plan;
+    new.status          := old.status;
+    new.slug            := old.slug;
+    new.email           := old.email;
+    new.admin_note      := old.admin_note;
+    new.created_at      := old.created_at;
+    new.azuracast_id    := old.azuracast_id;
+    new.azuracast_short := old.azuracast_short;
+    new.stream_url      := old.stream_url;
+    new.player_url      := old.player_url;
+    new.dj_username     := old.dj_username;
+    new.dj_password     := old.dj_password;
+    new.dj_port         := old.dj_port;
+    new.panel_password  := old.panel_password;
   end if;
   return new;
 end;
@@ -124,6 +148,13 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- Public list of live stations (only safe columns) for the Listen page ------
+create or replace view public.live_stations as
+  select id, station_name, genre, slug, stream_url, player_url
+  from public.stations
+  where status = 'live' and stream_url is not null;
+grant select on public.live_stations to anon, authenticated;
 
 -- ---------------------------------------------------------------------
 -- AFTER you have signed up on the website yourself, make yourself the

@@ -33,3 +33,14 @@ Accounts and the dashboard use [Supabase](https://supabase.com) (free tier). Unt
 3. In **Authentication → URL Configuration**, set the Site URL to your site and add `<your site>/dashboard.html` to the redirect URLs.
 4. Put the project URL and the anon/publishable key in `js/config.js`. Never use the service_role/secret key.
 5. Sign up on the site, then make yourself admin with the `insert into public.admins …` line at the bottom of `setup.sql`.
+
+## Streaming (AzuraCast)
+Each approved station is created on an [AzuraCast](https://www.azuracast.com) server: Icecast output, Liquidsoap AutoDJ, a live-DJ account and a control-panel login limited to that station. Live stations are listed under "On MiRadio" on the Listen page.
+
+The site talks to AzuraCast through the Supabase Edge Function in `supabase/functions/azuracast/index.ts`, so the AzuraCast API key never reaches the browser.
+
+1. Run AzuraCast on a server with a domain and HTTPS. Browsers block plain-HTTP audio on an HTTPS site.
+2. In AzuraCast, create an API key from an administrator account.
+3. In Supabase, create an Edge Function named `azuracast` with the code from `supabase/functions/azuracast/index.ts`.
+4. In Supabase, go to **Edge Functions → Secrets** and add `AZURACAST_URL` (for example `https://stream.example.com`) and `AZURACAST_API_KEY`.
+5. In the admin dashboard, setting a sign-up to **Approved** or **Live** creates its stream. **Paused** switches it off. You can also use **Create stream** on any row.

@@ -70,6 +70,7 @@
     },
     // Lets the directory know a station was played (keeps popularity rankings useful).
     click(uuid) {
+      if (String(uuid).startsWith("mi-")) return; // MiRadio's own stations aren't in the public directory
       request("/json/url/" + encodeURIComponent(uuid)).catch(() => {});
     },
     streamUrl(s) { return s.url_resolved || s.url; },

@@ -88,7 +88,8 @@
     try {
       let list;
       if (filters.tag === "__fav") {
-        list = await Radio.byUuids(favs);
+        list = (await Radio.byUuids(favs.filter((u) => !String(u).startsWith("mi-"))))
+          .concat(miStations.filter((m) => favs.includes(m.stationuuid)));
       } else if (!filters.name && !filters.tag && !filters.country && filters.order === "clickcount" && !append) {
         list = await Radio.top(PAGE);
       } else {
@@ -237,6 +238,33 @@
   audio.addEventListener("waiting", () => { if (current) pStatus.textContent = "Buffering…"; });
   audio.addEventListener("pause", () => setPlayerState("paused"));
   audio.addEventListener("error", () => { if (current) setPlayerState("error"); });
+
+  /* ---------- MiRadio's own live stations ---------- */
+  let miStations = [];
+  async function loadMiStations() {
+    if (!window.miDb) return;
+    const { data, error } = await miDb.from("live_stations").select("*").order("station_name");
+    if (error || !data) return;
+    const needHttps = location.protocol === "https:";
+    miStations = data
+      .filter((r) => r.stream_url && (!needHttps || r.stream_url.startsWith("https://")))
+      .map((r) => ({
+        stationuuid: "mi-" + r.id,
+        name: r.station_name,
+        url_resolved: r.stream_url,
+        favicon: "",
+        tags: r.genre || "",
+        countrycode: "MiRadio",
+        bitrate: 0,
+      }));
+    const box = $("#mi-section");
+    box.hidden = !miStations.length;
+    const grid2 = $("#mi-grid");
+    grid2.innerHTML = "";
+    miStations.forEach((st) => grid2.appendChild(card(st)));
+    markCurrent();
+  }
+  loadMiStations();
 
   /* ---------- Initial state from URL ---------- */
   const params = new URLSearchParams(location.search);
